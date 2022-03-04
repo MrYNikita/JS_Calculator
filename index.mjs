@@ -53,11 +53,18 @@ const jectCalculate = new classCalculate({
             },
 
         }),
+        new classOperation({
+
+            numberPriority   : 1,
+            stringOperation  : "\\^",
+            functionOperation: function(numberOne = NaN, numberTwo = NaN) {
+                
+                if (numberOne && numberTwo && typeof(numberOne) === "number" && typeof(numberTwo) === "number") { return numberOne ** numberTwo; };
+            
+            },
+
+        }),
 
     ],
 
 });
-
-jectCalculate.stringExpression = "2 * 2 * (2 + 2)";
-jectCalculate.jectController.functionCalculate();
-console.log(jectCalculate.arrayResultList);
