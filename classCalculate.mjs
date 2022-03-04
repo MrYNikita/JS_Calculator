@@ -103,49 +103,40 @@ class classCalculateController extends classCalculateModule {
         
         } = this.jectCalculate;
 
-        let stringResult = stringExpression;
+        let stringFind;
 
-        while (stringResult.match(/[(][0-9]+(?:.[0-9]+)? (?:[+*/-] [0-9]+(?:.[0-9]+)? ?)+[)]/g)) {
+        while (
+            
+            stringFind = this.jectCalculate.stringExpression.match(new RegExp(`[(][0-9]+(?:.[0-9]+)? (?:[${stringSymbolUse}] [0-9]+(?:.[0-9]+)? ?)+[)]`,"g"))?.[0] ??
+            this.jectCalculate.stringExpression.match(new RegExp(`[0-9]+(?:.[0-9]+)? (?:[${stringSymbolUse}] [0-9]+(?:.[0-9]+)? ?)+`))?.[0]
+            
+        ) {
 
-            let stringFind = stringResult.match(/[(][0-9]+(?:.[0-9]+)? (?:[+*/-] [0-9]+(?:.[0-9]+)? ?)+[)]/g)[0];
+            let arrayNumberPair;
             let stringResultLocal = stringFind;
 
             this.jectCalculate.arrayJectOperation.forEach((jectOperationNow) => {
 
-                while(stringResultLocal.match(new RegExp(`([0-9]+(?:.[0-9]+)?) [${jectOperationNow.stringOperation}] ([0-9]+(?:.[0-9]+)?)`))) {
+                const regexpParseOperation = new RegExp(`(?<numberOne>[0-9]+(?:.[0-9]+)?) [${jectOperationNow.stringOperation}] (?<numberTwo>[0-9]+(?:.[0-9]+)?)`); 
 
-                    let numberD = stringResultLocal.match(new RegExp(`([0-9]+(?:.[0-9]+)?) [${jectOperationNow.stringOperation}] ([0-9]+(?:.[0-9]+)?)`));
+                while(arrayNumberPair = stringResultLocal.match(regexpParseOperation)) {
 
-                    numberD = jectOperationNow.functionOperation(numberD[1] - 0, numberD[2] - 0);
-                    stringResultLocal = stringResultLocal.replace(new RegExp(`([0-9]+(?:.[0-9]+)?) [${jectOperationNow.stringOperation}] ([0-9]+(?:.[0-9]+)?)`),numberD);
+                    stringResultLocal = stringResultLocal.replace(
+                        
+                        regexpParseOperation,
+                        jectOperationNow.functionOperation(arrayNumberPair.groups.numberOne - 0,arrayNumberPair.groups.numberTwo - 0)
+                          
+                    );
         
                 };
 
             });
 
-            stringResult = stringResult.replace(stringFind,stringResultLocal.match(/[(]([^)]*)/)[1]);
+            this.jectCalculate.stringExpression = this.jectCalculate.stringExpression.replace(stringFind,stringResultLocal.match(/[(]?([^)]*)/)[1]);
 
         };
 
-        let stringFind = stringResult.match(/[0-9]+(?:.[0-9]+)? (?:[+*/-] [0-9]+(?:.[0-9]+)? ?)+/g)[0];
-        let stringResultLocal = stringFind;
-
-        this.jectCalculate.arrayJectOperation.forEach((jectOperationNow) => {
-
-            while(stringResultLocal.match(new RegExp(`([0-9]+(?:.[0-9]+)?) [${jectOperationNow.stringOperation}] ([0-9]+(?:.[0-9]+)?)`))) {
-
-                let numberD = stringResultLocal.match(new RegExp(`([0-9]+(?:.[0-9]+)?) [${jectOperationNow.stringOperation}] ([0-9]+(?:.[0-9]+)?)`));
-
-                numberD = jectOperationNow.functionOperation(numberD[1] - 0, numberD[2] - 0);
-                stringResultLocal = stringResultLocal.replace(new RegExp(`([0-9]+(?:.[0-9]+)?) [${jectOperationNow.stringOperation}] ([0-9]+(?:.[0-9]+)?)`),numberD);
-    
-            };
-
-        });
-
-        stringResult = stringResult.replace(stringFind,stringResultLocal);
-        
-        this.jectCalculate.arrayResultList.push(stringResult);
+        this.jectCalculate.arrayResultList.push(this.jectCalculate.stringExpression);
 
     };
 

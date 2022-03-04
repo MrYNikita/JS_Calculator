@@ -58,9 +58,6 @@ const jectCalculate = new classCalculate({
 
 });
 
-//jectCalculate.stringExpression = "5 + ((10 * 20 + 7.5 / 3) + 2 / 2) / (9 + 1)";
-jectCalculate.stringExpression = "2 * 2 * 2";
+jectCalculate.stringExpression = "2 * 2 * (2 + 2)";
 jectCalculate.jectController.functionCalculate();
 console.log(jectCalculate.arrayResultList);
-
-//console.log("5 + 4 + 4".match(/[(]?[0-9]+(?:.[0-9]+)? (?:[+*/-] [0-9]+(?:.[0-9]+)? ?)+[)]?/g));
